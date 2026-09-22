@@ -3982,3 +3982,1097 @@ button {
     transform: none;
   }
 }
+/* ============================================================
+   D1.4C — INTERACTION & STATE HIERARCHY
+   REGIMEON Operator Interaction System
+
+   State architecture:
+   S0 REST
+   S1 HOVER
+   S2 FOCUS
+   S3 SELECTED
+   S4 ACTIVE
+   S5 DISABLED
+   S6 LOADING
+   S7 STALE
+   ============================================================ */
+
+
+/* ============================================================
+   01. INTERACTION TOKENS
+   ============================================================ */
+
+:root {
+  --state-rest-border: var(--border-soft);
+  --state-rest-surface: rgba(7, 20, 29, 0.68);
+
+  --state-hover-border: rgba(126, 185, 213, 0.28);
+  --state-hover-surface: rgba(10, 29, 41, 0.86);
+
+  --state-focus-border: rgba(85, 226, 255, 0.48);
+  --state-focus-ring: rgba(85, 226, 255, 0.14);
+
+  --state-selected-border: rgba(85, 226, 255, 0.62);
+  --state-selected-surface: rgba(8, 34, 47, 0.9);
+
+  --state-active-border: rgba(53, 231, 165, 0.46);
+  --state-active-surface: rgba(7, 31, 29, 0.82);
+
+  --state-disabled-border: rgba(126, 185, 213, 0.055);
+  --state-disabled-surface: rgba(4, 12, 17, 0.46);
+
+  --state-loading-border: rgba(159, 140, 255, 0.3);
+  --state-loading-surface: rgba(20, 18, 38, 0.54);
+
+  --state-stale-border: rgba(246, 200, 95, 0.34);
+  --state-stale-surface: rgba(38, 30, 11, 0.46);
+
+  --state-transition:
+    180ms var(--ease-standard);
+
+  --state-transition-slow:
+    420ms var(--ease-standard);
+}
+
+
+/* ============================================================
+   02. INTERACTION LABORATORY
+   ============================================================ */
+
+.interaction-laboratory {
+  overflow: hidden;
+
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+
+  background:
+    radial-gradient(
+      circle at 88% 4%,
+      rgba(32, 212, 244, 0.045),
+      transparent 28%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(5, 17, 25, 0.94),
+      rgba(2, 9, 14, 0.98)
+    );
+
+  box-shadow:
+    var(--elevation-e2);
+}
+
+.interaction-laboratory-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+
+  padding: 30px;
+
+  border-bottom:
+    1px solid var(--border-subtle);
+}
+
+.interaction-laboratory-kicker {
+  margin: 0 0 8px;
+
+  color: var(--cyan-300);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.interaction-laboratory-title {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 17px;
+  font-weight: 570;
+  letter-spacing: -0.025em;
+}
+
+.interaction-laboratory-description {
+  max-width: 690px;
+  margin: 10px 0 0;
+
+  color: var(--text-tertiary);
+
+  font-size: 9px;
+  line-height: 1.7;
+}
+
+.interaction-laboratory-code {
+  flex: 0 0 auto;
+
+  padding: 6px 9px;
+
+  border:
+    1px solid rgba(85, 226, 255, 0.11);
+  border-radius: 5px;
+
+  background:
+    rgba(85, 226, 255, 0.035);
+
+  color: var(--text-tertiary);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+}
+
+
+/* ============================================================
+   03. STATE SPECIMEN GRID
+   ============================================================ */
+
+.interaction-state-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 10px;
+
+  padding: 30px;
+}
+
+.interaction-state-card {
+  position: relative;
+
+  min-height: 188px;
+  overflow: hidden;
+
+  padding: 18px;
+
+  border:
+    1px solid var(--state-rest-border);
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--state-rest-surface),
+      rgba(3, 12, 18, 0.9)
+    );
+
+  transition:
+    transform var(--state-transition),
+    border-color var(--state-transition),
+    background var(--state-transition),
+    box-shadow var(--state-transition),
+    opacity var(--state-transition);
+}
+
+.interaction-state-card::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--state-accent, rgba(126, 185, 213, 0.18)),
+      transparent
+    );
+
+  opacity: 0.55;
+}
+
+.interaction-state-code {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-bottom: 28px;
+
+  color: var(--text-muted);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+}
+
+.interaction-state-indicator {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 999px;
+
+  background:
+    var(--state-accent, var(--text-muted));
+
+  box-shadow:
+    0 0 10px
+      color-mix(
+        in srgb,
+        var(--state-accent, var(--text-muted)) 42%,
+        transparent
+      );
+}
+
+.interaction-state-name {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 13px;
+  font-weight: 580;
+}
+
+.interaction-state-description {
+  min-height: 50px;
+  margin: 8px 0 18px;
+
+  color: var(--text-tertiary);
+
+  font-size: 8px;
+  line-height: 1.6;
+}
+
+.interaction-state-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  padding-top: 12px;
+
+  border-top:
+    1px solid var(--border-subtle);
+
+  color: var(--text-muted);
+
+  font-family: var(--font-geist-mono);
+  font-size: 6px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+
+/* ============================================================
+   04. S0 — REST
+   ============================================================ */
+
+.interaction-state-rest {
+  --state-accent: rgba(126, 185, 213, 0.42);
+}
+
+
+/* ============================================================
+   05. S1 — HOVER
+   ============================================================ */
+
+.interaction-state-hover {
+  --state-accent: var(--cyan-500);
+
+  border-color:
+    var(--state-hover-border);
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--state-hover-surface),
+      rgba(4, 15, 22, 0.94)
+    );
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    var(--elevation-e3);
+}
+
+
+/* ============================================================
+   06. S2 — FOCUS
+   ============================================================ */
+
+.interaction-state-focus {
+  --state-accent: var(--cyan-300);
+
+  border-color:
+    var(--state-focus-border);
+
+  box-shadow:
+    0 0 0 2px var(--state-focus-ring),
+    var(--elevation-e3),
+    0 0 24px rgba(32, 212, 244, 0.05);
+}
+
+
+/* ============================================================
+   07. S3 — SELECTED
+   ============================================================ */
+
+.interaction-state-selected {
+  --state-accent: var(--cyan-300);
+
+  border-color:
+    var(--state-selected-border);
+
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(32, 212, 244, 0.09),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      var(--state-selected-surface),
+      rgba(4, 17, 25, 0.96)
+    );
+
+  box-shadow:
+    var(--elevation-e4),
+    var(--ambient-cyan-low);
+}
+
+.interaction-state-selected::after {
+  content: "";
+
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: var(--cyan-200);
+
+  box-shadow:
+    0 0 10px rgba(85, 226, 255, 0.8);
+}
+
+
+/* ============================================================
+   08. S4 — ACTIVE / LIVE
+   ============================================================ */
+
+.interaction-state-active {
+  --state-accent: var(--positive);
+
+  border-color:
+    var(--state-active-border);
+
+  background:
+    radial-gradient(
+      circle at 88% 8%,
+      rgba(53, 231, 165, 0.07),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      var(--state-active-surface),
+      rgba(4, 17, 20, 0.94)
+    );
+
+  box-shadow:
+    var(--elevation-e3),
+    var(--ambient-positive);
+}
+
+.interaction-state-active
+.interaction-state-indicator {
+  animation:
+    regimeon-live-pulse 1.8s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   09. S5 — DISABLED
+   ============================================================ */
+
+.interaction-state-disabled {
+  --state-accent: var(--text-disabled);
+
+  border-color:
+    var(--state-disabled-border);
+
+  background:
+    var(--state-disabled-surface);
+
+  opacity: 0.52;
+
+  box-shadow: none;
+}
+
+.interaction-state-disabled
+.interaction-state-name {
+  color: var(--text-tertiary);
+}
+
+
+/* ============================================================
+   10. S6 — LOADING
+   ============================================================ */
+
+.interaction-state-loading {
+  --state-accent: var(--violet);
+
+  border-color:
+    var(--state-loading-border);
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--state-loading-surface),
+      rgba(5, 12, 22, 0.92)
+    );
+
+  box-shadow:
+    var(--elevation-e2);
+}
+
+.interaction-state-loading::after {
+  content: "";
+
+  position: absolute;
+  right: -45%;
+  bottom: 0;
+
+  width: 70%;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--violet),
+      transparent
+    );
+
+  animation:
+    regimeon-processing 1.8s linear infinite;
+}
+
+
+/* ============================================================
+   11. S7 — STALE
+   ============================================================ */
+
+.interaction-state-stale {
+  --state-accent: var(--warning);
+
+  border-color:
+    var(--state-stale-border);
+
+  background:
+    radial-gradient(
+      circle at 90% 5%,
+      rgba(246, 200, 95, 0.055),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      var(--state-stale-surface),
+      rgba(15, 14, 8, 0.9)
+    );
+
+  box-shadow:
+    var(--elevation-e2),
+    var(--ambient-warning);
+}
+
+
+/* ============================================================
+   12. LIVE INTERACTION DEMONSTRATOR
+   ============================================================ */
+
+.interaction-demo {
+  padding: 0 30px 30px;
+}
+
+.interaction-demo-heading {
+  margin-bottom: 12px;
+
+  color: var(--text-muted);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.interaction-demo-shell {
+  overflow: hidden;
+
+  border:
+    1px solid var(--border-soft);
+  border-radius: 9px;
+
+  background:
+    rgba(2, 10, 15, 0.72);
+}
+
+.interaction-demo-row {
+  display: grid;
+  grid-template-columns:
+    minmax(150px, 1.5fr)
+    repeat(4, minmax(80px, 0.7fr));
+  align-items: center;
+  gap: 12px;
+
+  min-height: 54px;
+  padding: 0 16px;
+
+  border-bottom:
+    1px solid var(--border-subtle);
+
+  transition:
+    background var(--state-transition),
+    border-color var(--state-transition),
+    box-shadow var(--state-transition);
+}
+
+.interaction-demo-row:last-child {
+  border-bottom: 0;
+}
+
+.interaction-demo-row:hover {
+  background:
+    rgba(32, 212, 244, 0.028);
+}
+
+.interaction-demo-symbol {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: var(--text-primary);
+
+  font-family: var(--font-geist-mono);
+  font-size: 8px;
+  font-weight: 650;
+}
+
+.interaction-demo-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background:
+    var(--row-color, var(--cyan-300));
+
+  box-shadow:
+    0 0 8px var(--row-color, var(--cyan-300));
+}
+
+.interaction-demo-cell {
+  color: var(--text-tertiary);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+
+  font-variant-numeric:
+    tabular-nums lining-nums;
+}
+
+.interaction-demo-cell strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.interaction-demo-selected {
+  --row-color: var(--cyan-300);
+
+  background:
+    rgba(32, 212, 244, 0.035);
+
+  box-shadow:
+    inset 2px 0 0 var(--cyan-300);
+}
+
+.interaction-demo-live {
+  --row-color: var(--positive);
+}
+
+.interaction-demo-live
+.interaction-demo-dot {
+  animation:
+    regimeon-live-pulse 1.8s ease-in-out infinite;
+}
+
+.interaction-demo-stale {
+  --row-color: var(--warning);
+
+  background:
+    rgba(246, 200, 95, 0.018);
+}
+
+.interaction-demo-disabled {
+  --row-color: var(--text-disabled);
+
+  opacity: 0.42;
+}
+
+
+/* ============================================================
+   13. TRANSITION ARCHITECTURE
+   ============================================================ */
+
+.interaction-transition-section {
+  padding: 26px 30px;
+
+  border-top:
+    1px solid var(--border-subtle);
+}
+
+.interaction-transition-heading {
+  margin-bottom: 18px;
+
+  color: var(--cyan-300);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.interaction-transition-flow {
+  display: grid;
+  grid-template-columns:
+    repeat(7, minmax(0, 1fr));
+  align-items: center;
+  gap: 7px;
+}
+
+.interaction-transition-node {
+  position: relative;
+
+  display: grid;
+  min-height: 72px;
+  place-items: center;
+
+  padding: 10px;
+
+  border:
+    1px solid var(--border-subtle);
+  border-radius: 7px;
+
+  background:
+    rgba(255, 255, 255, 0.012);
+
+  text-align: center;
+}
+
+.interaction-transition-node strong {
+  display: block;
+
+  color: var(--text-secondary);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.interaction-transition-node span {
+  display: block;
+  margin-top: 4px;
+
+  color: var(--text-muted);
+
+  font-size: 6px;
+  text-transform: uppercase;
+}
+
+.interaction-transition-arrow {
+  position: absolute;
+  top: 50%;
+  right: -8px;
+
+  width: 8px;
+  height: 1px;
+
+  background:
+    rgba(85, 226, 255, 0.22);
+}
+
+.interaction-transition-arrow::after {
+  content: "";
+
+  position: absolute;
+  top: -2px;
+  right: 0;
+
+  width: 4px;
+  height: 4px;
+
+  border-top:
+    1px solid rgba(85, 226, 255, 0.34);
+  border-right:
+    1px solid rgba(85, 226, 255, 0.34);
+
+  transform: rotate(45deg);
+}
+
+
+/* ============================================================
+   14. STATE RULES
+   ============================================================ */
+
+.interaction-rules {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 9px;
+
+  padding: 0 30px 30px;
+}
+
+.interaction-rule {
+  min-height: 88px;
+
+  padding: 15px;
+
+  border:
+    1px solid var(--border-subtle);
+  border-radius: 7px;
+
+  background:
+    rgba(255, 255, 255, 0.012);
+}
+
+.interaction-rule-code {
+  margin-bottom: 8px;
+
+  color: var(--cyan-300);
+
+  font-family: var(--font-geist-mono);
+  font-size: 6px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+}
+
+.interaction-rule strong {
+  display: block;
+
+  color: var(--text-secondary);
+
+  font-size: 9px;
+  font-weight: 580;
+}
+
+.interaction-rule p {
+  margin: 5px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 7px;
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   15. ACCESSIBLE INTERACTIVE SPECIMEN
+   ============================================================ */
+
+.interaction-control {
+  width: 100%;
+
+  padding: 14px 16px;
+
+  border:
+    1px solid var(--border-soft);
+  border-radius: 7px;
+
+  background:
+    rgba(7, 22, 31, 0.72);
+
+  color: var(--text-secondary);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform var(--state-transition),
+    border-color var(--state-transition),
+    background var(--state-transition),
+    box-shadow var(--state-transition);
+}
+
+.interaction-control:hover {
+  transform: translateY(-1px);
+
+  border-color:
+    var(--state-hover-border);
+
+  background:
+    var(--state-hover-surface);
+}
+
+.interaction-control:focus-visible {
+  outline: none;
+
+  border-color:
+    var(--state-focus-border);
+
+  box-shadow:
+    0 0 0 3px var(--state-focus-ring),
+    var(--elevation-e3);
+}
+
+.interaction-control:active {
+  transform: translateY(0);
+
+  border-color:
+    var(--state-selected-border);
+
+  background:
+    var(--state-selected-surface);
+}
+
+.interaction-control:disabled {
+  cursor: not-allowed;
+
+  border-color:
+    var(--state-disabled-border);
+
+  background:
+    var(--state-disabled-surface);
+
+  color:
+    var(--text-disabled);
+
+  opacity: 0.58;
+
+  box-shadow: none;
+}
+
+
+/* ============================================================
+   16. STATE PRINCIPLE
+   ============================================================ */
+
+.interaction-principle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+
+  padding: 20px 30px;
+
+  border-top:
+    1px solid var(--border-subtle);
+
+  background:
+    rgba(0, 0, 0, 0.08);
+}
+
+.interaction-principle-copy {
+  max-width: 720px;
+}
+
+.interaction-principle-label {
+  margin-bottom: 6px;
+
+  color: var(--cyan-300);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.interaction-principle-text {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.interaction-principle-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  flex: 0 0 auto;
+
+  color: var(--positive);
+
+  font-family: var(--font-geist-mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.interaction-principle-status::before {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--positive);
+
+  box-shadow:
+    0 0 10px rgba(53, 231, 165, 0.7);
+}
+
+
+/* ============================================================
+   17. STATE ANIMATIONS
+   ============================================================ */
+
+@keyframes regimeon-live-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes regimeon-processing {
+  from {
+    transform: translateX(-120%);
+  }
+
+  to {
+    transform: translateX(230%);
+  }
+}
+
+
+/* ============================================================
+   18. RESPONSIVE — D1.4C
+   ============================================================ */
+
+@media (max-width: 1050px) {
+  .interaction-state-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .interaction-transition-flow {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+
+  .interaction-transition-arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .interaction-laboratory-header {
+    flex-direction: column;
+
+    padding: 22px 20px;
+  }
+
+  .interaction-state-grid {
+    padding: 20px;
+  }
+
+  .interaction-demo {
+    padding:
+      0 20px 20px;
+  }
+
+  .interaction-demo-row {
+    grid-template-columns:
+      minmax(130px, 1.4fr)
+      repeat(2, minmax(70px, 0.7fr));
+  }
+
+  .interaction-demo-cell:nth-child(4),
+  .interaction-demo-cell:nth-child(5) {
+    display: none;
+  }
+
+  .interaction-transition-section {
+    padding: 22px 20px;
+  }
+
+  .interaction-rules {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    padding:
+      0 20px 20px;
+  }
+
+  .interaction-principle {
+    align-items: flex-start;
+    flex-direction: column;
+
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .interaction-state-grid,
+  .interaction-rules,
+  .interaction-transition-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .interaction-demo-row {
+    grid-template-columns:
+      1fr auto;
+  }
+
+  .interaction-demo-cell {
+    display: none;
+  }
+
+  .interaction-demo-cell:last-child {
+    display: block;
+  }
+}
+
+
+/* ============================================================
+   19. REDUCED MOTION — D1.4C
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .interaction-state-card,
+  .interaction-control,
+  .interaction-demo-row {
+    transition: none;
+  }
+
+  .interaction-state-hover,
+  .interaction-control:hover,
+  .interaction-control:active {
+    transform: none;
+  }
+
+  .interaction-state-active
+  .interaction-state-indicator,
+  .interaction-demo-live
+  .interaction-demo-dot,
+  .interaction-state-loading::after {
+    animation: none;
+  }
+}

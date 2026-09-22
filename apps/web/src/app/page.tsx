@@ -250,6 +250,27 @@ const elevationLevels = [
   },
 ];
 
+
+const interactionStates = [
+  { code: "S0", name: "Rest", description: "The neutral analytical state. Present, readable and deliberately quiet.", behavior: "BASELINE", className: "interaction-state-rest" },
+  { code: "S1", name: "Hover", description: "Signals that an analytical object is inspectable without implying selection.", behavior: "DISCOVER", className: "interaction-state-hover" },
+  { code: "S2", name: "Focus", description: "Keyboard-visible operator focus with an explicit accessibility ring.", behavior: "NAVIGATE", className: "interaction-state-focus" },
+  { code: "S3", name: "Selected", description: "The analytical object currently chosen for inspection or manipulation.", behavior: "INSPECT", className: "interaction-state-selected" },
+  { code: "S4", name: "Active / Live", description: "A running model, streaming feed or executing analytical process.", behavior: "LIVE", className: "interaction-state-active" },
+  { code: "S5", name: "Disabled", description: "Unavailable functionality remains visible without competing for attention.", behavior: "LOCKED", className: "interaction-state-disabled" },
+  { code: "S6", name: "Loading", description: "Computation or retrieval is underway while structural context remains stable.", behavior: "PROCESSING", className: "interaction-state-loading" },
+  { code: "S7", name: "Stale", description: "Information remains usable but its freshness no longer meets system expectations.", behavior: "REFRESH", className: "interaction-state-stale" },
+];
+
+const interactionRules = [
+  { code: "R01", title: "Hover ≠ Selected", description: "Discovery never masquerades as an operator decision." },
+  { code: "R02", title: "Selected ≠ Active", description: "Selection describes attention. Active describes system execution." },
+  { code: "R03", title: "Active ≠ Positive", description: "A live model may produce favorable, neutral or adverse intelligence." },
+  { code: "R04", title: "Warning ≠ Stale", description: "Risk severity and information freshness remain separate concepts." },
+  { code: "R05", title: "Disabled ≠ Hidden", description: "Unavailable capabilities remain discoverable and structurally predictable." },
+  { code: "R06", title: "Loading ≠ Frozen", description: "Processing must communicate progress while preserving interface context." },
+];
+
 export default function Home() {
   return (
     <main className="regimeon-environment">
@@ -1181,15 +1202,121 @@ export default function Home() {
           </div>
         </section>
 
+
+
+        {/* =========================================================
+            08 — INTERACTION & STATE HIERARCHY
+        ========================================================= */}
+
+        <section className="d1-section">
+          <div className="d1-section-heading">
+            <span className="d1-section-index">08</span>
+            <span className="d1-section-title">Interaction &amp; State Hierarchy</span>
+            <span className="d1-section-line" />
+          </div>
+
+          <div className="interaction-laboratory">
+            <div className="interaction-laboratory-header">
+              <div>
+                <p className="interaction-laboratory-kicker">OPERATOR STATE LANGUAGE</p>
+                <h3 className="interaction-laboratory-title">Interaction communicates system truth.</h3>
+                <p className="interaction-laboratory-description">
+                  REGIMEON separates attention, selection, execution, availability, processing and data freshness into explicit states. Interaction must reveal what the system is doing without introducing ambiguity into financial intelligence.
+                </p>
+              </div>
+              <div className="interaction-laboratory-code">S0 → S7</div>
+            </div>
+
+            <div className="interaction-state-grid">
+              {interactionStates.map((state) => (
+                <article key={state.code} className={`interaction-state-card ${state.className}`}>
+                  <div className="interaction-state-code">
+                    <span>{state.code} / {state.name.toUpperCase()}</span>
+                    <span className="interaction-state-indicator" aria-hidden="true" />
+                  </div>
+                  <h4 className="interaction-state-name">{state.name}</h4>
+                  <p className="interaction-state-description">{state.description}</p>
+                  <div className="interaction-state-meta"><span>Behavior</span><strong>{state.behavior}</strong></div>
+                </article>
+              ))}
+            </div>
+
+            <div className="interaction-demo">
+              <div className="interaction-demo-heading">QUANTITATIVE STATE DEMONSTRATOR</div>
+              <div className="interaction-demo-shell">
+                {[
+                  ["Momentum Composite", "SELECTED", "0.78", "91.7%", "S3", "interaction-demo-selected"],
+                  ["Regime Engine", "LIVE", "RISK-OFF", "64%", "S4", "interaction-demo-live"],
+                  ["Correlation Matrix", "REST", "60D", "24", "S0", ""],
+                  ["Macro Risk Feed", "STALE", "18M", "REFRESH", "S7", "interaction-demo-stale"],
+                  ["Execution Gateway", "DISABLED", "RESEARCH", "LOCKED", "S5", "interaction-demo-disabled"],
+                ].map(([name, state, signal, confidence, code, className]) => (
+                  <div key={name} className={`interaction-demo-row ${className}`}>
+                    <div className="interaction-demo-symbol"><span className="interaction-demo-dot" aria-hidden="true" />{name}</div>
+                    <div className="interaction-demo-cell">STATE <strong>{state}</strong></div>
+                    <div className="interaction-demo-cell">VALUE <strong>{signal}</strong></div>
+                    <div className="interaction-demo-cell">META <strong>{confidence}</strong></div>
+                    <div className="interaction-demo-cell">{code}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="interaction-transition-section">
+              <div className="interaction-transition-heading">PRIMARY INTERACTION PATH</div>
+              <div className="interaction-transition-flow">
+                {[
+                  ["S0", "Rest"], ["S1", "Hover"], ["S2", "Focus"], ["S3", "Selected"], ["S4", "Active"], ["S6", "Loading"], ["S7", "Stale"],
+                ].map(([code, label], index, items) => (
+                  <div key={code} className="interaction-transition-node">
+                    <div><strong>{code}</strong><span>{label}</span></div>
+                    {index < items.length - 1 && <span className="interaction-transition-arrow" aria-hidden="true" />}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="interaction-rules">
+              {interactionRules.map((rule) => (
+                <article key={rule.code} className="interaction-rule">
+                  <div className="interaction-rule-code">{rule.code}</div>
+                  <strong>{rule.title}</strong>
+                  <p>{rule.description}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="interaction-demo">
+              <div className="interaction-demo-heading">ACCESSIBLE CONTROL BEHAVIOR</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "8px" }}>
+                <button type="button" className="interaction-control">Inspect Portfolio Risk</button>
+                <button type="button" className="interaction-control">Open Regime Analysis</button>
+                <button type="button" className="interaction-control" disabled>Execution Unavailable</button>
+              </div>
+            </div>
+
+            <div className="interaction-principle">
+              <div className="interaction-principle-copy">
+                <div className="interaction-principle-label">INTERACTION PRINCIPLE</div>
+                <p className="interaction-principle-text">
+                  State is information. Every transition must explain whether the operator is discovering, focusing, selecting or acting — and whether the underlying intelligence is live, processing, unavailable or stale.
+                </p>
+              </div>
+              <div className="interaction-principle-status">STATE SYSTEM READY</div>
+            </div>
+          </div>
+        </section>
+
+
         {/* =========================================================
             FOOTER
         ========================================================= */}
 
         <footer className="d1-footer">
-          <span>REGIMEON / VISUAL SYSTEM / D1.4B</span>
+          <span>REGIMEON / VISUAL SYSTEM / D1.4C</span>
 
           <span className="d1-footer-status">
-            Elevation hierarchy under evaluation
+            Interaction state system under evaluation
           </span>
         </footer>
       </div>
