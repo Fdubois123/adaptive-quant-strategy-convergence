@@ -1321,7 +1321,7 @@ export default function Home() {
 
             <div className="interaction-demo">
               <div className="interaction-demo-heading">ACCESSIBLE CONTROL BEHAVIOR</div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "8px" }}>
+              <div className="interaction-control-grid">
                 <button type="button" className="interaction-control">Inspect Portfolio Risk</button>
                 <button type="button" className="interaction-control">Open Regime Analysis</button>
                 <button type="button" className="interaction-control" disabled>Execution Unavailable</button>
@@ -1511,10 +1511,10 @@ export default function Home() {
         ========================================================= */}
 
         <footer className="d1-footer">
-          <span>REGIMEON / VISUAL SYSTEM / D1.5</span>
+          <span>REGIMEON / VISUAL SYSTEM / D1.6</span>
 
           <span className="d1-footer-status">
-            Data visualization language under evaluation
+            Design foundation verified
           </span>
         </footer>
       </div>
