@@ -271,6 +271,39 @@ const interactionRules = [
   { code: "R06", title: "Loading ≠ Frozen", description: "Processing must communicate progress while preserving interface context." },
 ];
 
+
+const visualizationSeries = [
+  { code: "P01", name: "Portfolio", role: "Primary realized performance", className: "viz-series-portfolio" },
+  { code: "B01", name: "Benchmark", role: "Comparative market reference", className: "viz-series-benchmark" },
+  { code: "F01", name: "Forecast", role: "Forward model expectation", className: "viz-series-forecast" },
+  { code: "C01", name: "Confidence", role: "Model uncertainty envelope", className: "viz-series-confidence" },
+  { code: "V01", name: "Volatility", role: "Dispersion and instability", className: "viz-series-volatility" },
+  { code: "D01", name: "Drawdown", role: "Peak-to-trough capital stress", className: "viz-series-drawdown" },
+];
+
+const riskBands = [
+  { name: "Normal", value: "0–25", note: "Routine monitoring", className: "viz-risk-normal" },
+  { name: "Elevated", value: "26–50", note: "Attention increasing", className: "viz-risk-elevated" },
+  { name: "High", value: "51–75", note: "Material stress", className: "viz-risk-high" },
+  { name: "Critical", value: "76–100", note: "Immediate review", className: "viz-risk-critical" },
+];
+
+const regimeBands = [
+  { name: "Risk-On", probability: 18, className: "viz-regime-riskon" },
+  { name: "Neutral", probability: 11, className: "viz-regime-neutral" },
+  { name: "Transition", probability: 7, className: "viz-regime-transition" },
+  { name: "Risk-Off", probability: 64, className: "viz-regime-riskoff" },
+];
+
+const correlationValues = [
+  [1.0, 0.31, -0.18, 0.24],
+  [0.31, 1.0, -0.42, 0.16],
+  [-0.18, -0.42, 1.0, -0.08],
+  [0.24, 0.16, -0.08, 1.0],
+];
+
+const correlationLabels = ["EQ", "FX", "FI", "CMD"];
+
 export default function Home() {
   return (
     <main className="regimeon-environment">
@@ -1308,15 +1341,180 @@ export default function Home() {
         </section>
 
 
+
+        {/* =========================================================
+            09 — DATA VISUALIZATION LANGUAGE
+        ========================================================= */}
+
+        <section className="d1-section">
+          <div className="d1-section-heading">
+            <span className="d1-section-index">09</span>
+            <span className="d1-section-title">Data Visualization Language</span>
+            <span className="d1-section-line" />
+          </div>
+
+          <div className="viz-laboratory">
+            <div className="viz-laboratory-header">
+              <div>
+                <p className="viz-kicker">QUANTITATIVE VISUAL GRAMMAR</p>
+                <h3>Data should reveal structure before decoration.</h3>
+                <p className="viz-description">
+                  REGIMEON gives performance, uncertainty, regime probability, correlation and risk a consistent analytical language. Color carries meaning; geometry carries magnitude; motion is reserved for changing system state.
+                </p>
+              </div>
+              <div className="viz-system-code">D1.5 / VISUALIZATION</div>
+            </div>
+
+            <div className="viz-block">
+              <div className="viz-block-heading">
+                <div>
+                  <span className="viz-block-index">01</span>
+                  <h4>Chart Architecture</h4>
+                </div>
+                <span>AXIS / GRID / LEGEND / CROSSHAIR / TOOLTIP</span>
+              </div>
+
+              <div className="viz-chart-shell">
+                <div className="viz-chart-toolbar">
+                  <div>
+                    <span className="viz-chart-label">PORTFOLIO PERFORMANCE</span>
+                    <strong>₹12.78L</strong>
+                    <span className="viz-chart-positive">+8.42% YTD</span>
+                  </div>
+                  <div className="viz-chart-legend" aria-label="Chart legend">
+                    <span><i className="viz-legend-portfolio" />Portfolio</span>
+                    <span><i className="viz-legend-benchmark" />Benchmark</span>
+                    <span><i className="viz-legend-forecast" />Forecast</span>
+                  </div>
+                </div>
+
+                <div className="viz-chart-stage">
+                  <div className="viz-y-axis"><span>1.30M</span><span>1.20M</span><span>1.10M</span><span>1.00M</span></div>
+                  <div className="viz-plot">
+                    <div className="viz-confidence-band" />
+                    <svg className="viz-line-chart" viewBox="0 0 900 250" preserveAspectRatio="none" role="img" aria-label="Illustrative portfolio and benchmark performance chart">
+                      <path className="viz-line-benchmark" d="M0 204 C85 194 110 174 175 181 S278 148 340 157 S445 119 510 133 S618 99 690 108 S800 75 900 83" />
+                      <path className="viz-line-portfolio" d="M0 214 C70 205 105 184 164 190 S260 155 320 166 S421 127 478 139 S568 103 631 115 S736 70 790 82 S852 48 900 54" />
+                      <path className="viz-line-forecast" d="M790 82 C835 70 866 58 900 42" />
+                    </svg>
+                    <div className="viz-crosshair"><span /></div>
+                    <div className="viz-tooltip"><span>18 SEP / 14:32</span><strong>₹12,78,432</strong><small>Portfolio +1.86%</small></div>
+                    <div className="viz-x-axis"><span>JAN</span><span>MAR</span><span>MAY</span><span>JUL</span><span>SEP</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="viz-block viz-block-divided">
+              <div className="viz-block-heading">
+                <div><span className="viz-block-index">02</span><h4>Financial Series Language</h4></div>
+                <span>SEMANTIC SERIES / NOT DECORATIVE COLOR</span>
+              </div>
+              <div className="viz-series-grid">
+                {visualizationSeries.map((series) => (
+                  <article key={series.code} className={`viz-series-card ${series.className}`}>
+                    <div className="viz-series-top"><span>{series.code}</span><i /></div>
+                    <strong>{series.name}</strong>
+                    <p>{series.role}</p>
+                    <div className="viz-series-sample"><span /></div>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <div className="viz-dual-grid viz-block-divided">
+              <div className="viz-block viz-sub-block">
+                <div className="viz-block-heading">
+                  <div><span className="viz-block-index">03</span><h4>Risk & Stress</h4></div>
+                  <span>SEVERITY</span>
+                </div>
+                <div className="viz-risk-meter">
+                  <div className="viz-risk-track"><span className="viz-risk-marker" /></div>
+                  <div className="viz-risk-readout"><span>COMPOSITE STRESS</span><strong>68</strong><small>HIGH</small></div>
+                </div>
+                <div className="viz-risk-grid">
+                  {riskBands.map((band) => (
+                    <article key={band.name} className={`viz-risk-card ${band.className}`}>
+                      <span>{band.value}</span><strong>{band.name}</strong><small>{band.note}</small>
+                    </article>
+                  ))}
+                </div>
+              </div>
+
+              <div className="viz-block viz-sub-block">
+                <div className="viz-block-heading">
+                  <div><span className="viz-block-index">04</span><h4>Regime Probability</h4></div>
+                  <span>STATE ≠ SEVERITY</span>
+                </div>
+                <div className="viz-regime-current"><span>CURRENT REGIME</span><strong>RISK-OFF</strong><small>64% MODEL PROBABILITY</small></div>
+                <div className="viz-regime-list">
+                  {regimeBands.map((regime) => (
+                    <div key={regime.name} className={`viz-regime-row ${regime.className}`}>
+                      <span>{regime.name}</span><div><i style={{ width: `${regime.probability}%` }} /></div><strong>{regime.probability}%</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="viz-dual-grid viz-block-divided">
+              <div className="viz-block viz-sub-block">
+                <div className="viz-block-heading">
+                  <div><span className="viz-block-index">05</span><h4>Correlation Matrix</h4></div>
+                  <span>−1.0 → +1.0</span>
+                </div>
+                <div className="viz-matrix">
+                  <span className="viz-matrix-corner" />
+                  {correlationLabels.map((label) => <span key={`h-${label}`} className="viz-matrix-label">{label}</span>)}
+                  {correlationValues.map((row, rowIndex) => (
+                    <div className="viz-matrix-row" key={correlationLabels[rowIndex]}>
+                      <span className="viz-matrix-label">{correlationLabels[rowIndex]}</span>
+                      {row.map((value, columnIndex) => {
+                        const intensity = Math.min(Math.abs(value), 1);
+                        const tone = value > 0 ? `rgba(32, 212, 244, ${0.06 + intensity * 0.3})` : `rgba(159, 140, 255, ${0.06 + intensity * 0.3})`;
+                        return <span key={`${rowIndex}-${columnIndex}`} className={rowIndex === 1 && columnIndex === 2 ? "viz-matrix-cell viz-matrix-selected" : "viz-matrix-cell"} style={{ background: tone }}>{value.toFixed(2)}</span>;
+                      })}
+                    </div>
+                  ))}
+                </div>
+                <div className="viz-matrix-key"><span>NEGATIVE</span><i /><span>NEUTRAL</span><i /><span>POSITIVE</span></div>
+              </div>
+
+              <div className="viz-block viz-sub-block">
+                <div className="viz-block-heading">
+                  <div><span className="viz-block-index">06</span><h4>3D Risk Foundation</h4></div>
+                  <span>GEOMETRY / DEPTH / EXPOSURE</span>
+                </div>
+                <div className="viz-risk-surface" aria-label="Conceptual three-dimensional portfolio risk surface">
+                  <div className="viz-risk-surface-grid" />
+                  <div className="viz-surface-mesh">
+                    {Array.from({ length: 9 }).map((_, index) => <span key={index} style={{ height: `${28 + [8,22,48,72,92,78,54,34,18][index]}px` }} />)}
+                  </div>
+                  <span className="viz-axis viz-axis-y">EXPOSURE ↑</span>
+                  <span className="viz-axis viz-axis-x">VOLATILITY →</span>
+                  <span className="viz-axis viz-axis-z">REGIME DEPTH</span>
+                  <div className="viz-surface-focus"><span>SELECTED CLUSTER</span><strong>72.4</strong><small>RISK HEIGHT</small></div>
+                </div>
+                <p className="viz-foundation-note">Foundation only. D2+ will implement the real interactive 3D portfolio risk surface with live portfolio and regime data.</p>
+              </div>
+            </div>
+
+            <div className="viz-principle">
+              <div><span>VISUALIZATION PRINCIPLE</span><p>Position and geometry explain quantity. Color explains semantic meaning. Motion explains change. No channel should be used merely to make the interface look active.</p></div>
+              <strong>VISUAL GRAMMAR READY</strong>
+            </div>
+          </div>
+        </section>
+
         {/* =========================================================
             FOOTER
         ========================================================= */}
 
         <footer className="d1-footer">
-          <span>REGIMEON / VISUAL SYSTEM / D1.4C</span>
+          <span>REGIMEON / VISUAL SYSTEM / D1.5</span>
 
           <span className="d1-footer-status">
-            Interaction state system under evaluation
+            Data visualization language under evaluation
           </span>
         </footer>
       </div>
